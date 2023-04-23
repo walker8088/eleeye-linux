@@ -1,5 +1,7 @@
 #include <assert.h>
-#include <sys/timeb.h>
+//#include <sys/timeb.h>
+#include <cstddef>
+#include <sys/time.h>
 
 #ifndef BASE_H
 #define BASE_H
@@ -78,10 +80,18 @@ inline int PopCnt32(uint32_t dw) {
   return (n >> 16) + (n & 0x0000ffff);
 }
 
+/*
 inline int64_t GetTime() {
   timeb tb;
   ftime(&tb);
   return (int64_t) tb.time * 1000 + tb.millitm;
+}
+*/
+inline int64_t GetTime() {
+  int err;
+  struct timeval tv;
+  err = gettimeofday(&tv, NULL);
+  return (int64_t) tv.tv_sec * 1000 + tv.tv_usec;
 }
 
 #endif
